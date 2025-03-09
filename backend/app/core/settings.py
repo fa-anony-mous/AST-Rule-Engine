@@ -23,8 +23,6 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: str = "your-openai-key-here"
     
-    # Active Database
-    ACTIVE_DB: str = "postgresql"
     
     model_config = SettingsConfigDict(
         env_file=".env",
