@@ -21,34 +21,6 @@ The AST Rule Engine is a backend application built with **FastAPI** and **Postgr
 
 ---
 
-
-
-```
-backend/
-├── app/
-│   ├── api/
-│   │   └── v1/
-│   │       ├── endpoints/
-│   │       │   ├── rules.py       # Rule management endpoints
-│   │       └── router.py          # Main API router
-│   ├── core/
-│   │   ├── config.py              # Application configuration
-│   │   └── settings.py            # Environment settings
-│   ├── db/
-│   │   ├── base.py                # Database connection setup
-│   │   └── migrations/            # Database migrations
-│   ├── models/
-│   │   ├── rule.py                # Rule model
-│   ├── schemas/
-│   │   ├── rule.py                # Rule schemas
-│   └── services/
-│       └── rule_engine.py         # Rule evaluation logic
-├── tests/                         # Test files
-└── main.py                        # Application entry point
-```
-
----
-
 ## API Endpoints
 
 ### Rules (`rules.py`)
