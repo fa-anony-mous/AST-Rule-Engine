@@ -1,0 +1,53 @@
+ast_rule_engine/
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── v1/
+│   │   │   │   ├── endpoints/
+│   │   │   │   │   ├── rules.py
+│   │   │   │   │   ├── auth.py
+│   │   │   │   │   ├── analytics.py
+│   │   │   │   │   └── admin.py
+│   │   │   │   └── router.py
+│   │   │   └── deps.py
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── security.py
+│   │   │   └── settings.py
+│   │   ├── db/
+│   │   │   ├── mongodb/
+│   │   │   ├── postgresql/
+│   │   │   ├── neo4j/
+│   │   │   └── base.py
+│   │   ├── models/
+│   │   │   ├── rule.py
+│   │   │   ├── user.py
+│   │   │   └── permission.py
+│   │   ├── schemas/
+│   │   │   ├── rule.py
+│   │   │   ├── user.py
+│   │   │   └── permission.py
+│   │   ├── services/
+│   │   │   ├── rule_engine/
+│   │   │   │   ├── parser.py
+│   │   │   │   ├── validator.py
+│   │   │   │   └── optimizer.py
+│   │   │   ├── ai/
+│   │   │   │   ├── explainer.py
+│   │   │   │   ├── converter.py
+│   │   │   │   └── optimizer.py
+│   │   │   └── analytics/
+│   │   └── utils/
+│   ├── tests/
+│   └── main.py
+├── frontend/
+│   ├── pages/
+│   │   ├── rules/
+│   │   ├── admin/
+│   │   └── analytics/
+│   ├── components/
+│   ├── utils/
+│   └── main.py
+├── docker/
+├── docs/
+└── README.md
