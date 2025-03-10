@@ -29,3 +29,7 @@ async def health_check():
 @app.get("/")
 async def read_root():
     return {"message": "Hello from FastAPI on Vercel!"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, port=8000)
