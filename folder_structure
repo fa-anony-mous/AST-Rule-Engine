@@ -5,9 +5,9 @@ ast_rule_engine/
 │   │   │   ├── v1/
 │   │   │   │   ├── endpoints/
 │   │   │   │   │   ├── rules.py
-│   │   │   │   │   ├── auth.py
-│   │   │   │   │   ├── analytics.py
-│   │   │   │   │   └── admin.py
+│   │   │   │   │   
+│   │   │   │   │   
+│   │   │   │   │   
 │   │   │   │   └── router.py
 │   │   │   └── deps.py
 │   │   ├── core/
