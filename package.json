@@ -1,0 +1,7 @@
+{
+  "name": "AST Rule Engine",
+  "version": "1.0.0",
+  "scripts": {
+    "vercel-build": "mkdir -p certs && echo $SUPABASE_CA_CERTIFICATE_CONTENT > certs/supabase_ca_certificate.pem"
+  }
+}
