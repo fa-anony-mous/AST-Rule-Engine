@@ -6,7 +6,8 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
+        "runtime": "python3.9",
+        "buildCommand": "mkdir -p certs && echo $SUPABASE_CA_CERTIFICATE_CONTENT > certs/supabase_ca_certificate.pem"
       }
     }
   ],
@@ -18,8 +19,5 @@
   ],
   "env": {
     "SUPABASE_CA_FILE": "certs/supabase_ca_certificate.pem"
-  },
-  "scripts": {
-    "postinstall": "mkdir -p certs && echo $SUPABASE_CA_CERTIFICATE_CONTENT > certs/supabase_ca_certificate.pem"
   }
 }
