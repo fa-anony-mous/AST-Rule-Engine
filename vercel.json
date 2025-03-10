@@ -15,5 +15,8 @@
         "src": "/(.*)",
         "dest": "backend/main.py"
       }
-    ]
+    ],
+    "engines": {
+      "python": "3.9"
+    }
   }
