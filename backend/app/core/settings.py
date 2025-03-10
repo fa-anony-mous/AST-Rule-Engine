@@ -13,12 +13,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     
     # Database URL
-    POSTGRES_URL: str = "postgresql+asyncpg://postgres:saketh123@db.zfcqnzovzfgdogwlkzsj.supabase.co:5432/postgres"
-    SQLALCHEMY_DATABASE_URI: str
+    POSTGRES_URL: str = os.environ.get("POSTGRES_URL")
+    SQLALCHEMY_DATABASE_URI: str = os.environ.get("SQLALCHEMY_DATABASE_URI")
         
     # Supabase settings
-    SUPABASE_URL: str = "https://zfcqnzovzfgdogwlkzsj.supabase.co"
-    SUPABASE_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmY3Fuem92emZnZG9nd2xrenNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MzQ4MTQsImV4cCI6MjA1NjUxMDgxNH0.-w8lZW-FwE_NCoX7XnqhmkzTvQRhppKxO5rCqcLUNwg"
+    SUPABASE_URL: str = os.environ.get("SUPABASE_URL")
+    SUPABASE_KEY: str = os.environ.get("SUPABASE_KEY")
     
 
     
