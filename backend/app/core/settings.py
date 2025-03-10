@@ -14,7 +14,6 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     
     # Database URL
-    POSTGRES_URL: str = "postgresql+asyncpg://postgres:saketh123@db.zfcqnzovzfgdogwlkzsj.supabase.co:5432/postgres?sslmode=require"
     SQLALCHEMY_DATABASE_URI: str
         
     # Supabase settings
