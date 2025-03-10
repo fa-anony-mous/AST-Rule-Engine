@@ -3,8 +3,8 @@ import sys
 print(f"Python version: {sys.version}")
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.router import api_router
-from app.core.settings import settings 
+from .app.api.v1.router import api_router
+from .app.core.settings import settings 
 
 
 app = FastAPI(
