@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pathlib import Path
+
 
 class Settings(BaseSettings):
     # Project Info
@@ -20,8 +20,7 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = "https://zfcqnzovzfgdogwlkzsj.supabase.co"
     SUPABASE_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmY3Fuem92emZnZG9nd2xrenNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MzQ4MTQsImV4cCI6MjA1NjUxMDgxNH0.-w8lZW-FwE_NCoX7XnqhmkzTvQRhppKxO5rCqcLUNwg"
     
-    # OpenAI
-    OPENAI_API_KEY: str = "your-openai-key-here"
+
     
     
     model_config = SettingsConfigDict(
