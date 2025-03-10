@@ -3,11 +3,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from app.core.settings import settings
 from typing import AsyncGenerator
 import ssl
+import os
 
 # Explicit SSL context
-ssl_context = ssl.create_default_context()
-ssl_context.check_hostname = False  # Disable hostname verification
-ssl_context.verify_mode = ssl.CERT_NONE  # Disable certificate verification
+ssl_context = ssl.create_default_context(cafile=os.environ.get("SUPABASE_CA_FILE"))
+ssl_context.check_hostname = True  # Enable hostname verification
+ssl_context.verify_mode = ssl.CERT_REQUIRED  # Require certificate verification
 
 # PostgreSQL Async Setup
 async_engine = create_async_engine(

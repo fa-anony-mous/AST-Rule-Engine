@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/app/main.py",
+      "src": "app/main.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
@@ -13,7 +13,13 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "backend/app/main.py"
+      "dest": "app/main.py"
     }
-  ]
+  ],
+  "env": {
+    "SUPABASE_CA_FILE": "certs/supabase_ca_certificate.pem"
+  },
+  "scripts": {
+    "postinstall": "mkdir -p certs && echo $SUPABASE_CA_CERTIFICATE_CONTENT > certs/supabase_ca_certificate.pem"
+  }
 }
