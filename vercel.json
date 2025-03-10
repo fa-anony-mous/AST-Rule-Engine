@@ -15,8 +15,5 @@
       "src": "/(.*)",
       "dest": "backend/app/main.py"
     }
-  ],
-  "env": {
-    "SUPABASE_CA_FILE": "certs/supabase_ca_certificate.pem"
-  }
+  ]
 }

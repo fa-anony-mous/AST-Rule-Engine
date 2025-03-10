@@ -4,17 +4,29 @@ from app.core.settings import settings
 from typing import AsyncGenerator
 import ssl
 import os
+import io
 
-# Explicit SSL context
-ssl_context = ssl.create_default_context(cafile=os.environ.get("SUPABASE_CA_FILE"))
-ssl_context.check_hostname = True  # Enable hostname verification
-ssl_context.verify_mode = ssl.CERT_REQUIRED  # Require certificate verification
+# Get the certificate content from the environment variable
+ca_certificate_content = os.environ.get("SUPABASE_CA_CERTIFICATE_CONTENT")
+
+# Create an SSL context from the certificate content
+if ca_certificate_content:
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = True
+    ssl_context.verify_mode = ssl.CERT_REQUIRED
+    ssl_context.load_verify_locations(cadata=ca_certificate_content)  # Load from content
+else:
+    ssl_context = None  # Handle the case where the environment variable is not set
 
 # PostgreSQL Async Setup
+connect_args = {}
+if ssl_context:
+    connect_args["ssl"] = ssl_context
+
 async_engine = create_async_engine(
     settings.SQLALCHEMY_DATABASE_URI,
     echo=True,
-    connect_args={"ssl": ssl_context}  # Pass SSL context
+    connect_args=connect_args  # Pass SSL context
 )
 
 AsyncSessionLocal = async_sessionmaker(
