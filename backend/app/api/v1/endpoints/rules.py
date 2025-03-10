@@ -1,26 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.core.db import SessionLocal
+from app.core.db import AsyncSessionLocal, get_db
 from app.models.rule import Rule
 from app.schemas.rule import RuleCreate, RuleResponse, RuleEvaluate
 from app.services.rule_engine import evaluate_rule
 
 router = APIRouter()
 
-async def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        await db.close()
-
 async def get_a_rule(db: AsyncSession, rule_id: int):
     result = await db.execute(select(Rule).filter(Rule.id == rule_id))
     rule = result.scalars().first()
     if not rule:
         raise HTTPException(status_code=404, detail="Rule not found")
-    return rule 
+    return rule
 
 @router.get("/")
 async def get_rules(db: AsyncSession = Depends(get_db)):
@@ -39,7 +32,7 @@ async def create_rule(rule_data: RuleCreate, db: AsyncSession = Depends(get_db))
     db.add(new_rule)
     await db.commit()
     await db.refresh(new_rule)
-    return new_rule 
+    return new_rule
 
 @router.put("/{rule_id}", response_model=RuleResponse)
 async def update_rule(rule_id: int, rule_data: RuleCreate, db: AsyncSession = Depends(get_db)):
@@ -55,12 +48,12 @@ async def evaluate_rule_endpoint(input_model: RuleEvaluate, db: AsyncSession = D
     """Evaluate a rule based on input data"""
     print(f"Received rule_id: {input_model.rule_id}, input_data: {input_model.input_data}")
     rule = await get_a_rule(db, input_model.rule_id)
-    
+
     result = evaluate_rule(rule, input_model.input_data)
-    
+
     return {"result": result}
 
-@router.delete("/{rule_id}", status_code=204) 
+@router.delete("/{rule_id}", status_code=204)
 async def delete_rule(rule_id: int, db: AsyncSession = Depends(get_db)):
     rule = await get_a_rule(db, rule_id)
     await db.delete(rule)
