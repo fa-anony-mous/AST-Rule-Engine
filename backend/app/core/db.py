@@ -58,8 +58,8 @@ engines = {
         echo=True,
         pool_size=10,
         max_overflow=5,
-        pool_pre_ping=True,  # ✅ Avoids stale connections
-        pool_recycle=180,  # ✅ Recycles connections every 3 minutes
+        pool_pre_ping=False,  # ❌ Disable pre-ping for testing
+        pool_recycle=300,  # ✅ Increase recycle time to 5 minutes (or try -1 to disable recycle)
         # connect_args=connect_args,
     ),
     EngineType.READER: create_async_engine(
@@ -67,8 +67,8 @@ engines = {
         echo=True,
         pool_size=10,
         max_overflow=5,
-        pool_pre_ping=True,
-        pool_recycle=180,
+        pool_pre_ping=False, # ❌ Disable pre-ping for testing
+        pool_recycle=300, # ✅ Increase recycle time to 5 minutes (or try -1 to disable recycle)
         # connect_args=connect_args,
     ),
 }
