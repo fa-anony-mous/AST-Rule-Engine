@@ -16,7 +16,7 @@ from sqlalchemy.orm import DeclarativeBase, Session
 from sqlalchemy.sql.expression import Delete, Insert, Update
 from sqlalchemy.exc import SQLAlchemyError
 
-from core.settings import settings
+from app.core.settings import settings
 
 # Context variable for session scoping
 session_context: ContextVar[str] = ContextVar("session_context")
