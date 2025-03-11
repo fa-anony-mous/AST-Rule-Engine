@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.core.db import AsyncSessionLocal, get_db
+from app.core.db import get_db
 from app.models.rule import Rule
 from app.schemas.rule import RuleCreate, RuleResponse, RuleEvaluate
 from app.services.rule_engine import evaluate_rule

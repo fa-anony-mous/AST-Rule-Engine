@@ -5,6 +5,7 @@ from contextvars import ContextVar, Token
 from enum import Enum
 from typing import AsyncGenerator
 
+
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_scoped_session,
@@ -15,10 +16,12 @@ from sqlalchemy.orm import DeclarativeBase, Session
 from sqlalchemy.sql.expression import Delete, Insert, Update
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.core.settings import settings
+from core.settings import settings
 
 # Context variable for session scoping
 session_context: ContextVar[str] = ContextVar("session_context")
+
+print(f"SQLALCHEMY_DATABASE_URI: {settings.SQLALCHEMY_DATABASE_URI}")
 
 def get_session_context() -> str:
     return session_context.get()
@@ -103,4 +106,10 @@ async def session_factory() -> AsyncGenerator[AsyncSession, None]:
         await _session.rollback()  # ✅ Rollback on error
         raise e
     finally:
-        await _session.close()  # ✅ Ensure session closes properly
+        await _session.close() 
+     # ✅ Ensure session closes properly
+
+#use session_factory() as db:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with session_factory() as db:
+        yield db
