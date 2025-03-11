@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from contextvars import ContextVar, Token
 from enum import Enum
 from typing import AsyncGenerator
-
+from fastapi import HTTPException
 
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -104,7 +104,8 @@ async def session_factory() -> AsyncGenerator[AsyncSession, None]:
         yield _session
     except SQLAlchemyError as e:
         await _session.rollback()  # ✅ Rollback on error
-        raise e
+        print(f"Database error during session: {e}")
+        raise HTTPException(status_code=500, detail="Database error") from e
     finally:
         await _session.close() 
      # ✅ Ensure session closes properly
