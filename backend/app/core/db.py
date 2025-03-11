@@ -25,10 +25,12 @@ if ssl_context:
 async_engine = create_async_engine(
     settings.SQLALCHEMY_DATABASE_URI,
     echo=True,
+    pool_size=10,  
     connect_args=connect_args  # Pass SSL context correctly
 )
 
 AsyncSessionLocal = async_sessionmaker(
+    settings.SQLALCHEMY_DATABASE_URI,
     async_engine,
     class_=AsyncSession,
     expire_on_commit=False
@@ -43,8 +45,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         try:
             yield session  # Provide session
-        except SQLAlchemyError:  # Catch any SQLAlchemy-related errors
-            await session.rollback()  # Rollback transaction on failure
-            raise  # Re-raise the exception
+        except SQLAlchemyError:
+            await session.rollback()  # Rollback on failure
+            raise
         finally:
-            await session.close()  # Ensure the session is closed
+            await session.close()  # Ensure session closes
