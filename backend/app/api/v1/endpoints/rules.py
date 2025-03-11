@@ -23,7 +23,11 @@ async def get_rules(db: AsyncSession = Depends(get_db)):
 
 @router.get("/{rule_id}", response_model=RuleResponse)
 async def get_rule(rule_id: int, db: AsyncSession = Depends(get_db)):
-    return await get_a_rule(db, rule_id)
+    try:
+        return await get_a_rule(db, rule_id)
+    except Exception as e:
+        print(f"Error fetching rule: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.post("/", response_model=RuleResponse)
 async def create_rule(rule_data: RuleCreate, db: AsyncSession = Depends(get_db)):
