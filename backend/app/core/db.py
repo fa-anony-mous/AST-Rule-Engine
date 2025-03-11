@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from sqlalchemy.orm import DeclarativeBase
 from app.core.settings import settings
 from typing import AsyncGenerator
+from sqlalchemy.exc import SQLAlchemyError
 import ssl
 import os
 
@@ -37,9 +38,13 @@ class Base(DeclarativeBase):  # Preferred way in SQLAlchemy 2.0+
     pass
 
 # Async Database dependency
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         try:
-            yield session
+            yield session  # Provide session
+        except SQLAlchemyError:  # Catch any SQLAlchemy-related errors
+            await session.rollback()  # Rollback transaction on failure
+            raise  # Re-raise the exception
         finally:
-            await session.close()
+            await session.close()  # Ensure the session is closed
