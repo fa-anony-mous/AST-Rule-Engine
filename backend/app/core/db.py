@@ -30,7 +30,6 @@ async_engine = create_async_engine(
 )
 
 AsyncSessionLocal = async_sessionmaker(
-    settings.SQLALCHEMY_DATABASE_URI,
     async_engine,
     class_=AsyncSession,
     expire_on_commit=False
