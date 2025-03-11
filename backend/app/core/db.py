@@ -37,19 +37,19 @@ class EngineType(Enum):
     WRITER = "writer"
     READER = "reader"
 
-# Configure SSL if certificate is provided
-ca_certificate_content = os.environ.get("SUPABASE_CA_CERTIFICATE_CONTENT")
-ssl_context = None
-if ca_certificate_content:
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = True
-    ssl_context.verify_mode = ssl.CERT_REQUIRED
-    ssl_context.load_verify_locations(cadata=ca_certificate_content)
+# # Configure SSL if certificate is provided
+# ca_certificate_content = os.environ.get("SUPABASE_CA_CERTIFICATE_CONTENT")
+# ssl_context = None
+# if ca_certificate_content:
+#     ssl_context = ssl.create_default_context()
+#     ssl_context.check_hostname = True
+#     ssl_context.verify_mode = ssl.CERT_REQUIRED
+#     ssl_context.load_verify_locations(cadata=ca_certificate_content)
 
-# Database connection arguments
-connect_args = {}
-if ssl_context:
-    connect_args["ssl_context"] = ssl_context  # Correct key for SQLAlchemy
+# # Database connection arguments
+# connect_args = {}
+# if ssl_context:
+#     connect_args["ssl_context"] = ssl_context  # Correct key for SQLAlchemy
 
 # Async Database Engines (Support Read/Write Separation)
 engines = {
@@ -60,7 +60,7 @@ engines = {
         max_overflow=5,
         pool_pre_ping=True,  # ✅ Avoids stale connections
         pool_recycle=180,  # ✅ Recycles connections every 3 minutes
-        connect_args=connect_args,
+        # connect_args=connect_args,
     ),
     EngineType.READER: create_async_engine(
         settings.SQLALCHEMY_DATABASE_URI,  # Currently same DB, change if needed
@@ -69,7 +69,7 @@ engines = {
         max_overflow=5,
         pool_pre_ping=True,
         pool_recycle=180,
-        connect_args=connect_args,
+        # connect_args=connect_args,
     ),
 }
 
