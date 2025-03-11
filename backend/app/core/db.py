@@ -47,7 +47,7 @@ class EngineType(Enum):
 #     ssl_context.load_verify_locations(cadata=ca_certificate_content)
 
 # # Database connection arguments
-# connect_args = {}
+#connect_args = {"pgbouncer":True}
 # if ssl_context:
 #     connect_args["ssl_context"] = ssl_context  # Correct key for SQLAlchemy
 
@@ -56,20 +56,19 @@ engines = {
     EngineType.WRITER: create_async_engine(
         settings.SQLALCHEMY_DATABASE_URI,
         echo=True,
-        pool_size=10,
-        max_overflow=5,
-        pool_pre_ping=False,  # ❌ Disable pre-ping for testing
-        pool_recycle=300,  # ✅ Increase recycle time to 5 minutes (or try -1 to disable recycle)
-        # connect_args=connect_args,
+        pool_size=1,         # Reduced for serverless
+        max_overflow=0,      # Reduced for serverless
+        pool_pre_ping=True,  # Enable pre-ping
+        pool_recycle=1800, 
+        #connect_args=connect_args,
     ),
     EngineType.READER: create_async_engine(
-        settings.SQLALCHEMY_DATABASE_URI,  # Currently same DB, change if needed
+        settings.SQLALCHEMY_DATABASE_URI,
         echo=True,
-        pool_size=10,
-        max_overflow=5,
-        pool_pre_ping=False, # ❌ Disable pre-ping for testing
-        pool_recycle=300, # ✅ Increase recycle time to 5 minutes (or try -1 to disable recycle)
-        # connect_args=connect_args,
+        pool_size=1,         # Reduced for serverless
+        max_overflow=0,      # Reduced for serverless
+        pool_pre_ping=True,  # Enable pre-ping
+        pool_recycle=1800, 
     ),
 }
 
@@ -111,6 +110,14 @@ async def session_factory() -> AsyncGenerator[AsyncSession, None]:
      # ✅ Ensure session closes properly
 
 #use session_factory() as db:
+# Replace your current get_db function with this
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with session_factory() as db:
-        yield db
+    session = _async_session_factory()
+    try:
+        yield session
+    except SQLAlchemyError as e:
+        await session.rollback()
+        print(f"Database error: {e}")
+        raise HTTPException(status_code=500, detail="Database error") from e
+    finally:
+        await session.close()
