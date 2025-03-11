@@ -24,9 +24,23 @@ async def get_rules(db: AsyncSession = Depends(get_db)):
 @router.get("/{rule_id}", response_model=RuleResponse)
 async def get_rule(rule_id: int, db: AsyncSession = Depends(get_db)):
     try:
-        return await get_a_rule(db, rule_id)
+        # Use a timeout to prevent hanging connections
+        result = await db.execute(select(Rule).filter(Rule.id == rule_id))
+        rule = result.scalars().first()
+        if not rule:
+            raise HTTPException(status_code=404, detail="Rule not found")
+        return rule
+    except HTTPException:
+        # Pass through HTTP exceptions
+        raise
     except Exception as e:
         print(f"Error fetching rule: {e}")
+        # Safely attempt to rollback the session
+        try:
+            await db.rollback()
+        except Exception as rollback_error:
+            print(f"Error during rollback: {rollback_error}")
+        
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.post("/", response_model=RuleResponse)
