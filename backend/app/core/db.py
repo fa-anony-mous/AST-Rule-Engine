@@ -1,5 +1,4 @@
-import os
-import ssl
+from sqlalchemy.pool import NullPool
 from typing import AsyncGenerator
 from fastapi import HTTPException
 
@@ -17,7 +16,8 @@ from app.core.settings import settings
 engine = create_async_engine(
     settings.SQLALCHEMY_DATABASE_URI,
     echo=False,  # Disable SQL echo in production
-    poolclass=None,  # Disable pooling entirely for serverless
+    poolclass=NullPool,  # Disable pooling entirely for serverless
+
     # Alternative approach with minimal pooling:
     # pool_size=1,
     # max_overflow=0,
