@@ -17,7 +17,9 @@ if ca_certificate_content:
     ssl_context.load_verify_locations(cadata=ca_certificate_content)  # Load from content
 
 # PostgreSQL Async Setup
-connect_args = {"ssl_context": ssl_context} if ssl_context else {}
+connect_args = {}
+if ssl_context:
+    connect_args["ssl"] = ssl_context  # Pass the SSL context correctly
 
 async_engine = create_async_engine(
     settings.SQLALCHEMY_DATABASE_URI,
@@ -26,7 +28,7 @@ async_engine = create_async_engine(
 )
 
 AsyncSessionLocal = async_sessionmaker(
-    bind=async_engine,
+    async_engine,
     class_=AsyncSession,
     expire_on_commit=False
 )
