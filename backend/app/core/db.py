@@ -60,6 +60,7 @@ engines = {
         max_overflow=0,      # Reduced for serverless
         pool_pre_ping=True,  # Enable pre-ping
         pool_recycle=1800, 
+        pool_use_lifo=True,
         #connect_args=connect_args,
     ),
     EngineType.READER: create_async_engine(
@@ -69,6 +70,7 @@ engines = {
         max_overflow=0,      # Reduced for serverless
         pool_pre_ping=True,  # Enable pre-ping
         pool_recycle=1800, 
+        pool_use_lifo=True,
     ),
 }
 
@@ -111,13 +113,12 @@ async def session_factory() -> AsyncGenerator[AsyncSession, None]:
 
 #use session_factory() as db:
 # Replace your current get_db function with this
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+async def get_db() -> AsyncSession:
     session = _async_session_factory()
     try:
         yield session
-    except SQLAlchemyError as e:
-        await session.rollback()
-        print(f"Database error: {e}")
-        raise HTTPException(status_code=500, detail="Database error") from e
     finally:
-        await session.close()
+        try:
+            await session.close()
+        except Exception as e:
+            print(f"Error closing session: {e}")

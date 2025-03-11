@@ -10,11 +10,24 @@ from app.api.v1.router import api_router
 from app.core.settings import settings
 
 
+from contextlib import asynccontextmanager
+from app.core.db import engines, EngineType
+
+# Add this startup/shutdown handler
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Nothing special needed
+    yield
+    # Shutdown: Dispose all database engines
+    for engine in engines.values():
+        await engine.dispose()
+
+# Update your FastAPI app creation
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan  # Add the lifespan handler
 )
-
 # Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
@@ -42,4 +55,4 @@ async def read_root():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app=app, port=8000)
-    asnyc
+    
